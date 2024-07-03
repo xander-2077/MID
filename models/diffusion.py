@@ -226,17 +226,11 @@ class TransformerLinear(Module):
         ctx_emb = self.ctx_up(ctx_emb)
         emb = self.y_up(x)
         final_emb = torch.cat([ctx_emb, emb], dim=1).permute(1,0,2)
-        #pdb.set_trace()
         final_emb = self.pos_emb(final_emb)
 
         trans = self.transformer_encoder(final_emb)  # 13 * b * 128
         trans = trans[1:].permute(1,0,2)   # B * 12 * 128, drop the first one which is the z
         return self.linear(trans)
-
-
-
-
-
 
 
 class LinearDecoder(Module):
@@ -255,8 +249,8 @@ class LinearDecoder(Module):
                 #nn.Linear(2, 64),
                 #nn.Linear(2, 64),
             ])
-    def forward(self, code):
 
+    def forward(self, code):
         out = code
         for i, layer in enumerate(self.layers):
             out = layer(out)

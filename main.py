@@ -2,12 +2,10 @@ from mid import MID
 import argparse
 import os
 import yaml
-# from pprint import pprint
+from pprint import pprint
 from easydict import EasyDict
 import numpy as np
 import pdb
-
-
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -26,9 +24,9 @@ def main():
     for k, v in vars(args).items():
        config[k] = v
     config["exp_name"] = args.config.split("/")[-1].split(".")[0]
-    config["dataset"] = args.dataset[:-1]
-    #pdb.set_trace()
+    config["dataset"] = args.dataset
     config = EasyDict(config)
+    pprint(config)
     agent = MID(config)
 
     # keyattr = ["lr", "data_dir", "epochs", "dataset", "batch_size","diffnet"]
@@ -41,9 +39,9 @@ def main():
 
     sampling = "ddim"
     steps = 5
-
+    # pdb.set_trace()
     if config["eval_mode"]:
-        agent.eval(sampling, 100//step)
+        agent.eval(sampling, 100//steps)
     else:
         agent.train()
 
